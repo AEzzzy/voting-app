@@ -55,10 +55,11 @@ export default function ResultsPage() {
   const handleRevealWinner = () => {
     setRevealStep(3);
     
-    // Fire rich gold confetti
-    const duration = 4000;
+    // Fire rich gold & emerald confetti
+    const duration = 5000;
     const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100, colors: ['#fbbf24', '#f59e0b', '#d97706', '#ffffff'] };
+    // Added emerald green to match the jewels!
+    const defaults = { startVelocity: 45, spread: 360, ticks: 100, zIndex: 100, colors: ['#fbbf24', '#f59e0b', '#d97706', '#10b981', '#ffffff'] };
 
     const randomInRange = (min, max) => Math.random() * (max - min) + min;
 
@@ -75,29 +76,36 @@ export default function ResultsPage() {
     }, 250);
   };
 
-  // The new PREMIUM Reveal Card!
-  const RevealCard = ({ team, rankText, medalColor, shadowColor, medalIcon, delay = 0 }) => (
+  // The ULTRA PREMIUM Jewel Reveal Card
+  const RevealCard = ({ team, rankText, medalGradient, glowColor, medalIcon, delay = 0 }) => (
     <motion.div 
-      animate={{ y: [0, -6, 0] }}
+      animate={{ y: [0, -8, 0] }}
       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className={`relative p-6 md:p-8 rounded-[2rem] flex flex-col items-center w-64 md:w-80 z-20 border-2 ${team?.borderColor || 'border-amber-400/30'}`}
+      className="relative p-6 md:p-8 rounded-[2rem] flex flex-col items-center w-64 md:w-80 z-20 border-[3px] border-amber-300/50"
       style={{ 
-        boxShadow: `0 0 40px ${team?.glowColor || shadowColor}`,
-        backgroundColor: 'rgba(15, 23, 42, 0.75)',
-        backdropFilter: 'blur(16px)'
+        boxShadow: `0 0 50px ${glowColor}, inset 0 0 30px rgba(251, 191, 36, 0.15)`,
+        backgroundColor: 'rgba(10, 10, 10, 0.85)',
+        backdropFilter: 'blur(20px)'
       }}
     >
-      {/* Shine overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-white/10 to-transparent rounded-[2rem] opacity-50" />
+      {/* Jewel glass reflection overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-transparent rounded-[2rem] opacity-70 pointer-events-none" />
       
-      <div className="text-5xl md:text-6xl mb-4 filter drop-shadow-2xl relative z-10">{medalIcon}</div>
-      <div className="font-black tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs relative z-10" style={{ color: medalColor }}>{rankText}</div>
+      {/* Glowing Icon */}
+      <div className="text-6xl md:text-7xl mb-4 filter drop-shadow-[0_0_20px_rgba(255,255,255,0.6)] relative z-10">{medalIcon}</div>
       
-      <h3 className="text-2xl md:text-3xl font-black text-white mb-8 text-center leading-tight drop-shadow-lg relative z-10" dir="rtl">{team.name}</h3>
+      {/* Gold Gradient Text for Rank */}
+      <div className="font-black tracking-[0.2em] uppercase mb-4 text-xs relative z-10 bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 bg-clip-text text-transparent drop-shadow-md">
+        {rankText}
+      </div>
       
-      <div className={`flex flex-col items-center w-full rounded-2xl ${team?.color || 'bg-slate-900/90'} py-4 border-t border-white/10 relative z-10`}>
-        <span className="text-white/60 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-1">Total Votes</span>
-        <span className="text-4xl md:text-5xl font-black text-white drop-shadow-md">{team.votes}</span>
+      {/* Huge Premium Name */}
+      <h3 className="text-3xl md:text-4xl font-black text-white mb-8 text-center leading-tight drop-shadow-[0_4px_10px_rgba(0,0,0,1)] relative z-10" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
+      
+      {/* Metallic Inner Box for Votes */}
+      <div className={`flex flex-col items-center w-full rounded-2xl py-5 border-[2px] border-white/30 relative z-10 ${medalGradient} shadow-[inset_0_0_25px_rgba(255,255,255,0.4)]`}>
+        <span className="text-white/90 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase mb-1 drop-shadow-md">Total Votes</span>
+        <span className="text-4xl md:text-5xl font-black text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]">{team.votes}</span>
       </div>
     </motion.div>
   );
@@ -172,7 +180,7 @@ export default function ResultsPage() {
                     <div className="flex items-baseline gap-4 md:gap-6">
                       <span className="text-xl md:text-2xl font-light text-slate-300 w-6">0{index + 1}</span>
                       <div>
-                        <h3 className="text-lg md:text-xl font-bold text-slate-800 tracking-wide" dir="rtl">{team.name}</h3>
+                        <h3 className="text-lg md:text-xl font-bold text-slate-800 tracking-wide" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
                         <p className="text-[10px] text-slate-400 tracking-[0.15em] font-bold uppercase mt-1">{team.englishName}</p>
                       </div>
                     </div>
@@ -209,18 +217,18 @@ export default function ResultsPage() {
             <div 
               className="absolute inset-0 bg-[url('/bg-clean.jpg')] bg-cover bg-center bg-no-repeat"
             />
-            {/* Dark overlay to make the text pop and give it that cinematic feel */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            {/* Extremely dark overlay to make the gold and jewels glow dramatically */}
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
 
             <button 
               onClick={() => setIsRevealing(false)} 
-              className="absolute top-4 right-4 md:top-8 md:right-8 text-white/50 hover:text-white transition-colors bg-black/40 hover:bg-black/60 p-3 md:p-4 rounded-full shadow-lg border border-white/10 z-50 backdrop-blur-md"
+              className="absolute top-4 right-4 md:top-8 md:right-8 text-white/50 hover:text-white transition-colors bg-black/40 hover:bg-black/60 p-3 md:p-4 rounded-full shadow-lg border border-amber-500/30 z-50 backdrop-blur-md"
             >
               <X size={20} />
             </button>
 
             {/* Scaled-down Podium */}
-            <div className="flex-1 flex items-end justify-center w-full max-w-6xl pb-16 md:pb-24 gap-4 md:gap-8 relative z-10 mt-10">
+            <div className="flex-1 flex items-end justify-center w-full max-w-7xl pb-16 md:pb-24 gap-6 md:gap-10 relative z-10 mt-10">
               
               {/* 2nd Place */}
               <div className="flex flex-col items-center flex-1">
@@ -232,10 +240,17 @@ export default function ResultsPage() {
                       transition={{ type: "spring", bounce: 0.4, duration: 1 }}
                       className="flex flex-col items-center w-full relative"
                     >
-                      <RevealCard team={teams[1]} rankText="Second Place" medalColor="#cbd5e1" shadowColor="rgba(203, 213, 225, 0.4)" medalIcon="🥈" />
+                      <RevealCard 
+                        team={teams[1]} 
+                        rankText="Second Place" 
+                        medalGradient="bg-gradient-to-br from-slate-300 via-slate-400 to-slate-600" 
+                        glowColor="rgba(148, 163, 184, 0.6)" 
+                        medalIcon="🥈" 
+                      />
                       
-                      <div className="w-full h-32 md:h-48 mt-[-15px] pt-8 relative flex items-center justify-center bg-slate-800/80 backdrop-blur-md border-t-[4px] border-slate-300 shadow-xl rounded-t-[2rem] z-0">
-                        <span className="text-5xl md:text-6xl font-black text-white/20">II</span>
+                      <div className="w-full h-32 md:h-48 mt-[-15px] pt-8 relative flex items-center justify-center bg-gradient-to-b from-slate-400 to-slate-800 border-t-[4px] border-slate-200 shadow-[0_0_40px_rgba(148,163,184,0.4)] rounded-t-[2rem] z-0 overflow-hidden">
+                        <div className="absolute inset-0 bg-[url('/bg-clean.jpg')] opacity-20 mix-blend-overlay" />
+                        <span className="text-5xl md:text-6xl font-black text-white/40 drop-shadow-md">II</span>
                       </div>
                     </motion.div>
                   )}
@@ -252,10 +267,17 @@ export default function ResultsPage() {
                       transition={{ type: "spring", bounce: 0.5, duration: 1.2, delay: 0.2 }}
                       className="flex flex-col items-center w-full relative"
                     >
-                      <RevealCard team={teams[0]} rankText="Grand Winner" medalColor="#fbbf24" shadowColor="rgba(251, 191, 36, 0.5)" medalIcon="🏆" />
+                      <RevealCard 
+                        team={teams[0]} 
+                        rankText="Grand Winner" 
+                        medalGradient="bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-700" 
+                        glowColor="rgba(251, 191, 36, 0.8)" 
+                        medalIcon="🏆" 
+                      />
                       
-                      <div className="w-full h-48 md:h-64 mt-[-15px] pt-10 relative flex items-center justify-center bg-amber-900/40 backdrop-blur-md border-t-[6px] border-amber-400 shadow-2xl rounded-t-[2rem] z-0">
-                        <span className="text-6xl md:text-7xl font-black text-amber-400/20">I</span>
+                      <div className="w-full h-48 md:h-64 mt-[-15px] pt-10 relative flex items-center justify-center bg-gradient-to-b from-amber-500 to-amber-950 border-t-[6px] border-yellow-300 shadow-[0_0_60px_rgba(251,191,36,0.6)] rounded-t-[2rem] z-0 overflow-hidden">
+                        <div className="absolute inset-0 bg-[url('/bg-clean.jpg')] opacity-30 mix-blend-overlay" />
+                        <span className="text-6xl md:text-7xl font-black text-amber-200/50 drop-shadow-lg">I</span>
                       </div>
                     </motion.div>
                   )}
@@ -272,10 +294,17 @@ export default function ResultsPage() {
                       transition={{ type: "spring", bounce: 0.4, duration: 1 }}
                       className="flex flex-col items-center w-full relative"
                     >
-                      <RevealCard team={teams[2]} rankText="Third Place" medalColor="#f97316" shadowColor="rgba(249, 115, 22, 0.4)" medalIcon="🥉" />
+                      <RevealCard 
+                        team={teams[2]} 
+                        rankText="Third Place" 
+                        medalGradient="bg-gradient-to-br from-orange-400 via-orange-600 to-orange-800" 
+                        glowColor="rgba(234, 88, 12, 0.6)" 
+                        medalIcon="🥉" 
+                      />
                       
-                      <div className="w-full h-24 md:h-32 mt-[-15px] pt-6 relative flex items-center justify-center bg-orange-950/60 backdrop-blur-md border-t-[4px] border-orange-500 shadow-xl rounded-t-[2rem] z-0">
-                        <span className="text-4xl md:text-5xl font-black text-orange-500/20">III</span>
+                      <div className="w-full h-24 md:h-32 mt-[-15px] pt-6 relative flex items-center justify-center bg-gradient-to-b from-orange-500 to-orange-950 border-t-[4px] border-orange-300 shadow-[0_0_40px_rgba(234,88,12,0.4)] rounded-t-[2rem] z-0 overflow-hidden">
+                        <div className="absolute inset-0 bg-[url('/bg-clean.jpg')] opacity-30 mix-blend-overlay" />
+                        <span className="text-4xl md:text-5xl font-black text-orange-200/50 drop-shadow-md">III</span>
                       </div>
                     </motion.div>
                   )}
@@ -287,17 +316,17 @@ export default function ResultsPage() {
             {/* Scaled-down Reveal Controls */}
             <div className="mt-6 mb-2 relative z-50 flex gap-3 md:gap-4">
               {revealStep === 0 && (
-                <button onClick={() => setRevealStep(1)} className="px-8 py-3 md:py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white rounded-full text-xs md:text-sm font-bold tracking-[0.1em] uppercase shadow-lg transition-all hover:scale-105 active:scale-95 border border-white/20">
+                <button onClick={() => setRevealStep(1)} className="px-10 py-4 md:py-5 bg-black/60 backdrop-blur-md hover:bg-black/80 text-amber-500 rounded-full text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 border border-amber-500/50">
                   Begin Reveal
                 </button>
               )}
               {revealStep === 1 && (
-                <button onClick={() => setRevealStep(2)} className="px-8 py-3 md:py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white rounded-full text-xs md:text-sm font-bold tracking-[0.1em] uppercase shadow-lg transition-all hover:scale-105 active:scale-95 border border-white/20">
+                <button onClick={() => setRevealStep(2)} className="px-10 py-4 md:py-5 bg-black/60 backdrop-blur-md hover:bg-black/80 text-amber-500 rounded-full text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 border border-amber-500/50">
                   Next: Runner Up
                 </button>
               )}
               {revealStep === 2 && (
-                <button onClick={handleRevealWinner} className="px-8 py-3 md:py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white rounded-full text-xs md:text-sm font-bold tracking-[0.1em] uppercase shadow-[0_10px_30px_rgba(217,119,6,0.5)] transition-all hover:scale-105 active:scale-95 border border-amber-300">
+                <button onClick={handleRevealWinner} className="px-10 py-4 md:py-5 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-black rounded-full text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_40px_rgba(245,158,11,0.6)] transition-all hover:scale-105 active:scale-95 border-2 border-yellow-200">
                   Reveal Winner
                 </button>
               )}
