@@ -52,6 +52,15 @@ export default function ResultsPage() {
   const [revealStep, setRevealStep] = useState(0); 
 
   const [resetInput, setResetInput] = useState('');
+  const [revealAudio, setRevealAudio] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const audio = new Audio('/reveal-music.webm');
+      audio.volume = 0.8;
+      setRevealAudio(audio);
+    }
+  }, []);
 
   useEffect(() => {
     if (isRevealing) return;
@@ -164,6 +173,10 @@ export default function ResultsPage() {
               onClick={() => {
                 setRevealStep(0);
                 setIsRevealing(true);
+                if (revealAudio) {
+                  revealAudio.currentTime = 0;
+                  revealAudio.play().catch(e => console.error('Audio play blocked:', e));
+                }
               }}
               disabled={teams.length === 0}
               className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-xl shadow-lg shadow-slate-900/20 transition-all hover:-translate-y-0.5 active:translate-y-0 text-xs font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
@@ -251,7 +264,13 @@ export default function ResultsPage() {
 
             {/* Exit Button - Top Right */}
             <button 
-              onClick={() => setIsRevealing(false)} 
+              onClick={() => {
+                setIsRevealing(false);
+                if (revealAudio) {
+                  revealAudio.pause();
+                  revealAudio.currentTime = 0;
+                }
+              }} 
               className="absolute top-4 right-4 md:top-6 md:right-6 text-white/50 hover:text-white transition-colors bg-black/40 hover:bg-black/60 p-3 rounded-full shadow-lg border border-amber-500/30 z-50 backdrop-blur-md"
             >
               <X size={20} />
