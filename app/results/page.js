@@ -133,7 +133,7 @@ export default function ResultsPage() {
         {rankText}
       </div>
       
-      <h3 className="text-xl md:text-2xl font-black text-white mb-3 text-center leading-tight drop-shadow-[0_4px_10px_rgba(0,0,0,1)] relative z-10" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
+      <h3 className="text-xl md:text-2xl font-normal text-white mb-3 text-center leading-tight drop-shadow-[0_4px_10px_rgba(0,0,0,1)] relative z-10" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
       
       <div className={`flex flex-col items-center w-full rounded-xl py-2 md:py-3 border-[2px] border-white/30 relative z-10 ${medalGradient} shadow-[inset_0_0_20px_rgba(255,255,255,0.4)]`}>
         <span className="text-white/90 text-[8px] md:text-[9px] font-black tracking-[0.3em] uppercase mb-0.5 drop-shadow-md">Total Votes</span>
@@ -212,7 +212,7 @@ export default function ResultsPage() {
                     <div className="flex items-baseline gap-4 md:gap-6">
                       <span className="text-xl md:text-2xl font-light text-slate-300 w-6">0{index + 1}</span>
                       <div>
-                        <h3 className="text-lg md:text-xl font-bold text-slate-800 tracking-wide" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
+                        <h3 className="text-lg md:text-xl font-normal text-slate-800 tracking-wide" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
                         <p className="text-[10px] text-slate-400 tracking-[0.15em] font-bold uppercase mt-1">{team.englishName}</p>
                       </div>
                     </div>
@@ -282,12 +282,12 @@ export default function ResultsPage() {
                 <TypewriterText 
                   text="مبارك مهنى!" 
                   delay={1200} 
-                  className="text-5xl md:text-7xl font-black text-amber-400 drop-shadow-[0_0_30px_rgba(251,191,36,0.8)]" 
+                  className="text-5xl md:text-7xl font-normal text-amber-400 drop-shadow-[0_0_30px_rgba(251,191,36,0.8)]" 
                 />
                 <TypewriterText 
                   text="اعز الله قدركم" 
                   delay={2500} 
-                  className="text-3xl md:text-5xl font-bold text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]" 
+                  className="text-3xl md:text-5xl font-normal text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]" 
                 />
               </div>
             )}
