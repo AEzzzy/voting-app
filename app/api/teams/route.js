@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
+import { db } from '../../../lib/firebase';
 import { collection, getDocs, doc, updateDoc, increment, setDoc } from 'firebase/firestore';
 
 const INITIAL_TEAMS = [
