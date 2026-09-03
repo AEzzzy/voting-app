@@ -1,17 +1,61 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/firebase';
-import { collection, getDocs, doc, updateDoc, increment, setDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, increment, setDoc, deleteDoc } from 'firebase/firestore';
 
 const INITIAL_TEAMS = [
-  { id: 'team-yellow', name: 'الفريق الأصفر', englishName: 'Yellow Team', color: 'bg-amber-500', hover: 'hover:bg-amber-400' },
-  { id: 'team-silver', name: 'الفريق الفضي', englishName: 'Silver Team', color: 'bg-slate-400', hover: 'hover:bg-slate-300' },
-  { id: 'team-orange', name: 'الفريق البرتقالي', englishName: 'Orange Team', color: 'bg-orange-500', hover: 'hover:bg-orange-400' },
-  { id: 'team-blue', name: 'الفريق الأزرق', englishName: 'Blue Team', color: 'bg-indigo-600', hover: 'hover:bg-indigo-500' }
+  { 
+    id: 'engineers', 
+    name: 'المهندسون الحاذقون', 
+    englishName: 'Skilled Engineers',
+    color: 'bg-sky-950/90', 
+    hover: 'hover:bg-sky-900',
+    borderColor: 'border-sky-400/30',
+    glowColor: 'rgba(56, 189, 248, 0.4)'
+  },
+  { 
+    id: 'chefs', 
+    name: 'الطباخون الماهرون', 
+    englishName: 'Skilled Chefs',
+    color: 'bg-rose-950/90', 
+    hover: 'hover:bg-rose-900',
+    borderColor: 'border-rose-400/30',
+    glowColor: 'rgba(251, 113, 133, 0.4)'
+  },
+  { 
+    id: 'teachers', 
+    name: 'المعلمون المتعلمون', 
+    englishName: 'Educated Teachers',
+    color: 'bg-emerald-950/90', 
+    hover: 'hover:bg-emerald-900',
+    borderColor: 'border-emerald-400/30',
+    glowColor: 'rgba(52, 211, 153, 0.4)'
+  },
+  { 
+    id: 'technicians', 
+    name: 'التقنيون المتطورون', 
+    englishName: 'Advanced Technicians',
+    color: 'bg-violet-950/90', 
+    hover: 'hover:bg-violet-900',
+    borderColor: 'border-violet-400/30',
+    glowColor: 'rgba(167, 139, 250, 0.4)'
+  },
 ];
 
-async function initializeDatabaseIfEmpty() {
+async function checkAndSyncDatabase() {
   const snapshot = await getDocs(collection(db, 'teams'));
-  if (snapshot.empty) {
+  const currentDocs = snapshot.docs.map(doc => doc.id);
+  
+  // If the old wrong teams are there (e.g. 'team-yellow'), delete them all!
+  if (currentDocs.includes('team-yellow')) {
+    for (const docId of currentDocs) {
+      await deleteDoc(doc(db, 'teams', docId));
+    }
+    // Re-create the correct teams
+    for (const team of INITIAL_TEAMS) {
+      await setDoc(doc(db, 'teams', team.id), { ...team, votes: 0 });
+    }
+  } else if (snapshot.empty) {
+    // Standard initialization if truly empty
     for (const team of INITIAL_TEAMS) {
       await setDoc(doc(db, 'teams', team.id), { ...team, votes: 0 });
     }
@@ -20,7 +64,7 @@ async function initializeDatabaseIfEmpty() {
 
 export async function GET() {
   try {
-    await initializeDatabaseIfEmpty();
+    await checkAndSyncDatabase();
     const snapshot = await getDocs(collection(db, 'teams'));
     const teams = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json(teams);
