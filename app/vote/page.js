@@ -96,10 +96,10 @@ export default function VotePage() {
         className="absolute inset-0 bg-[url('/bg-clean.jpg')] z-0 bg-cover bg-center bg-no-repeat" 
       />
       
-      {/* Container perfectly centered in the lower white space */}
+      {/* Container slightly higher up in the lower white space */}
       <div 
         className="absolute left-1/2 z-10 w-full max-w-xl px-4 flex flex-col items-center justify-center"
-        style={{ top: '60%', transform: 'translate(-50%, -50%)' }}
+        style={{ top: '53%', transform: 'translate(-50%, -50%)' }}
       >
         <AnimatePresence mode="wait">
           {showThankYou ? (
