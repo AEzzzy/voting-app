@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, AlertTriangle, Trophy, X, Activity } from 'lucide-react';
+import { RotateCcw, AlertTriangle, Trophy, X, Activity, Maximize, Minimize } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 const TypewriterText = ({ text, delay = 0, className, speed = 100 }) => {
@@ -53,6 +53,7 @@ export default function ResultsPage() {
 
   const [resetInput, setResetInput] = useState('');
   const [revealAudio, setRevealAudio] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -61,6 +62,24 @@ export default function ResultsPage() {
       setRevealAudio(audio);
     }
   }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
 
   useEffect(() => {
     if (isRevealing) return;
@@ -168,7 +187,14 @@ export default function ResultsPage() {
               Total Registered Votes: <span className="text-slate-900">{totalVotes}</span>
             </p>
           </div>
-          <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto">
+            <button 
+              onClick={toggleFullscreen}
+              className="flex-none flex items-center justify-center bg-white hover:bg-slate-50 text-slate-400 hover:text-slate-600 px-4 py-3 rounded-xl border border-slate-200 transition-all shadow-sm"
+              title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+            >
+              {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
+            </button>
             <button 
               onClick={() => {
                 setRevealStep(0);
