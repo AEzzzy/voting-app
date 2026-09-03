@@ -14,6 +14,8 @@ export default function ResultsPage() {
   const [isRevealing, setIsRevealing] = useState(false);
   const [revealStep, setRevealStep] = useState(0); 
 
+  const [resetInput, setResetInput] = useState('');
+
   useEffect(() => {
     if (isRevealing) return;
 
@@ -45,6 +47,7 @@ export default function ResultsPage() {
     try {
       await fetch('/api/teams', { method: 'DELETE' });
       setShowResetConfirm(false);
+      setResetInput('');
       setTeams(teams.map(t => ({...t, votes: 0})));
     } catch (error) {
       console.error("Failed to reset:", error);
@@ -329,16 +332,32 @@ export default function ResultsPage() {
           <div className="bg-white border border-slate-200 p-8 rounded-[1.5rem] max-w-sm w-full shadow-2xl">
             <div className="flex items-center gap-3 text-red-600 mb-4">
               <AlertTriangle size={24} />
-              <h2 className="text-xl font-bold text-slate-900">Reset Database</h2>
+              <h2 className="text-xl font-bold text-slate-900">Danger Zone</h2>
             </div>
             
-            <p className="text-slate-600 mb-8 text-sm leading-relaxed font-medium">
-              This action will permanently zero out all incoming votes. Proceed to initialize a new round?
+            <p className="text-slate-600 mb-6 text-sm leading-relaxed font-medium">
+              This action will permanently zero out all incoming votes for a new round. This cannot be undone.
             </p>
+
+            <div className="mb-8">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                Type "confirm reset" to proceed
+              </label>
+              <input 
+                type="text"
+                value={resetInput}
+                onChange={(e) => setResetInput(e.target.value)}
+                placeholder="confirm reset"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-red-500/50"
+              />
+            </div>
 
             <div className="flex justify-end gap-3">
               <button
-                onClick={() => setShowResetConfirm(false)}
+                onClick={() => {
+                  setShowResetConfirm(false);
+                  setResetInput('');
+                }}
                 className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-widest transition-all"
                 disabled={isResetting}
               >
@@ -346,10 +365,10 @@ export default function ResultsPage() {
               </button>
               <button
                 onClick={handleReset}
-                disabled={isResetting}
-                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest shadow-md shadow-red-600/20 transition-all flex items-center gap-2 disabled:opacity-70"
+                disabled={isResetting || resetInput.toLowerCase() !== 'confirm reset'}
+                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest shadow-md shadow-red-600/20 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isResetting ? 'Resetting...' : 'Yes, Zero Votes'}
+                {isResetting ? 'Resetting...' : 'Reset Votes'}
               </button>
             </div>
           </div>
