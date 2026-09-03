@@ -55,7 +55,6 @@ export default function ResultsPage() {
   const handleRevealWinner = () => {
     setRevealStep(3);
     
-    // Fire rich gold & emerald confetti
     const duration = 5000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 45, spread: 360, ticks: 100, zIndex: 100, colors: ['#fbbf24', '#f59e0b', '#d97706', '#10b981', '#ffffff'] };
@@ -75,30 +74,30 @@ export default function ResultsPage() {
     }, 250);
   };
 
-  // The SCALED-DOWN Jewel Reveal Card so it fits on screen without scrolling
+  // Ultra-compact Reveal Card so it never scrolls
   const RevealCard = ({ team, rankText, medalGradient, glowColor, medalIcon, delay = 0 }) => (
     <motion.div 
       animate={{ y: [0, -5, 0] }}
       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className="relative p-4 md:p-6 rounded-[1.5rem] flex flex-col items-center w-52 md:w-64 z-20 border-[3px] border-amber-300/50"
+      className="relative p-4 md:p-5 rounded-[1.5rem] flex flex-col items-center w-48 md:w-56 z-20 border-[3px] border-amber-300/50"
       style={{ 
-        boxShadow: `0 0 50px ${glowColor}, inset 0 0 30px rgba(251, 191, 36, 0.15)`,
+        boxShadow: `0 0 50px ${glowColor}, inset 0 0 20px rgba(251, 191, 36, 0.15)`,
         backgroundColor: 'rgba(10, 10, 10, 0.85)',
         backdropFilter: 'blur(20px)'
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-transparent rounded-[1.5rem] opacity-70 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-[1.5rem] opacity-70 pointer-events-none" />
       
-      <div className="text-4xl md:text-5xl mb-2 filter drop-shadow-[0_0_20px_rgba(255,255,255,0.6)] relative z-10">{medalIcon}</div>
-      <div className="font-black tracking-[0.2em] uppercase mb-2 text-[10px] relative z-10 bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 bg-clip-text text-transparent drop-shadow-md">
+      <div className="text-4xl md:text-5xl mb-2 filter drop-shadow-[0_0_15px_rgba(255,255,255,0.6)] relative z-10">{medalIcon}</div>
+      <div className="font-black tracking-[0.2em] uppercase mb-1 text-[9px] relative z-10 bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 bg-clip-text text-transparent drop-shadow-md">
         {rankText}
       </div>
       
-      <h3 className="text-xl md:text-2xl font-black text-white mb-4 text-center leading-tight drop-shadow-[0_4px_10px_rgba(0,0,0,1)] relative z-10" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
+      <h3 className="text-xl md:text-2xl font-black text-white mb-3 text-center leading-tight drop-shadow-[0_4px_10px_rgba(0,0,0,1)] relative z-10" style={{ fontFamily: 'var(--font-kanzal)' }} dir="rtl">{team.name}</h3>
       
-      <div className={`flex flex-col items-center w-full rounded-2xl py-3 border-[2px] border-white/30 relative z-10 ${medalGradient} shadow-[inset_0_0_25px_rgba(255,255,255,0.4)]`}>
-        <span className="text-white/90 text-[9px] md:text-[10px] font-black tracking-[0.3em] uppercase mb-1 drop-shadow-md">Total Votes</span>
-        <span className="text-3xl md:text-4xl font-black text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]">{team.votes}</span>
+      <div className={`flex flex-col items-center w-full rounded-xl py-2 md:py-3 border-[2px] border-white/30 relative z-10 ${medalGradient} shadow-[inset_0_0_20px_rgba(255,255,255,0.4)]`}>
+        <span className="text-white/90 text-[8px] md:text-[9px] font-black tracking-[0.3em] uppercase mb-0.5 drop-shadow-md">Total Votes</span>
+        <span className="text-2xl md:text-3xl font-black text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]">{team.votes}</span>
       </div>
     </motion.div>
   );
@@ -204,43 +203,41 @@ export default function ResultsPage() {
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-end overflow-hidden"
+            className="fixed inset-0 h-screen w-screen z-50 flex flex-col items-center justify-end overflow-hidden"
           >
             {/* The PREMIUM Voting App Background Image */}
-            <div 
-              className="absolute inset-0 bg-[url('/bg-clean.jpg')] bg-cover bg-center bg-no-repeat"
-            />
-            {/* Extremely dark overlay to make the gold and jewels glow dramatically */}
+            <div className="absolute inset-0 bg-[url('/bg-clean.jpg')] bg-cover bg-center bg-no-repeat" />
             <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
 
+            {/* Exit Button - Top Right */}
             <button 
               onClick={() => setIsRevealing(false)} 
-              className="absolute top-4 right-4 md:top-8 md:right-8 text-white/50 hover:text-white transition-colors bg-black/40 hover:bg-black/60 p-3 md:p-4 rounded-full shadow-lg border border-amber-500/30 z-50 backdrop-blur-md"
+              className="absolute top-4 right-4 md:top-6 md:right-6 text-white/50 hover:text-white transition-colors bg-black/40 hover:bg-black/60 p-3 rounded-full shadow-lg border border-amber-500/30 z-50 backdrop-blur-md"
             >
               <X size={20} />
             </button>
 
-            {/* Floating Action Buttons */}
-            <div className="absolute top-10 z-50 flex gap-3 md:gap-4">
+            {/* Floating Action Buttons - Fixed on the Bottom Left so they don't block the podiums */}
+            <div className="absolute bottom-8 left-8 z-50 flex flex-col gap-3">
               {revealStep === 0 && (
-                <button onClick={() => setRevealStep(1)} className="px-10 py-4 bg-black/60 backdrop-blur-md hover:bg-black/80 text-amber-500 rounded-full text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 border border-amber-500/50">
+                <button onClick={() => setRevealStep(1)} className="px-8 py-4 bg-black/60 backdrop-blur-md hover:bg-black/80 text-amber-500 rounded-2xl text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 border border-amber-500/50">
                   Begin Reveal
                 </button>
               )}
               {revealStep === 1 && (
-                <button onClick={() => setRevealStep(2)} className="px-10 py-4 bg-black/60 backdrop-blur-md hover:bg-black/80 text-amber-500 rounded-full text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 border border-amber-500/50">
+                <button onClick={() => setRevealStep(2)} className="px-8 py-4 bg-black/60 backdrop-blur-md hover:bg-black/80 text-amber-500 rounded-2xl text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 border border-amber-500/50">
                   Next: Runner Up
                 </button>
               )}
               {revealStep === 2 && (
-                <button onClick={handleRevealWinner} className="px-10 py-4 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-black rounded-full text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_40px_rgba(245,158,11,0.6)] transition-all hover:scale-105 active:scale-95 border-2 border-yellow-200">
+                <button onClick={handleRevealWinner} className="px-8 py-4 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-black rounded-2xl text-xs md:text-sm font-black tracking-[0.2em] uppercase shadow-[0_0_40px_rgba(245,158,11,0.6)] transition-all hover:scale-105 active:scale-95 border-2 border-yellow-200">
                   Reveal Winner
                 </button>
               )}
             </div>
 
-            {/* Scaled-down Podium that sits exactly on the bottom edge */}
-            <div className="flex flex-row items-end justify-center w-full max-w-6xl pb-0 px-4 gap-4 md:gap-6 relative z-10">
+            {/* Podiums - Scaled using vh (viewport height) to guarantee they fit on any screen */}
+            <div className="flex flex-row items-end justify-center w-full max-w-5xl px-4 gap-2 md:gap-4 relative z-10 h-full pb-0">
               
               {/* 2nd Place */}
               <div className="flex flex-col items-center flex-1">
@@ -260,9 +257,9 @@ export default function ResultsPage() {
                         medalIcon="🥈" 
                       />
                       
-                      <div className="w-full h-24 md:h-32 mt-[-15px] pt-4 relative flex items-center justify-center bg-gradient-to-b from-slate-400 to-slate-800 border-t-[4px] border-slate-200 shadow-[0_0_40px_rgba(148,163,184,0.4)] rounded-t-[1.5rem] z-0 overflow-hidden">
-                        <div className="absolute inset-0 bg-[url('/bg-clean.jpg')] opacity-20 mix-blend-overlay" />
-                        <span className="text-4xl md:text-5xl font-black text-white/40 drop-shadow-md">II</span>
+                      {/* Clean gradient podium, NO background image inside it so no messy letters show up */}
+                      <div className="w-full h-[18vh] mt-[-20px] pt-4 relative flex items-center justify-center bg-gradient-to-b from-slate-400 to-slate-800 border-t-[4px] border-slate-200 shadow-[0_0_40px_rgba(148,163,184,0.4)] rounded-t-[1.5rem] z-0 overflow-hidden">
+                        <span className="text-4xl md:text-5xl font-black text-slate-200/40 drop-shadow-md">II</span>
                       </div>
                     </motion.div>
                   )}
@@ -287,9 +284,8 @@ export default function ResultsPage() {
                         medalIcon="🏆" 
                       />
                       
-                      <div className="w-full h-32 md:h-44 mt-[-15px] pt-6 relative flex items-center justify-center bg-gradient-to-b from-amber-500 to-amber-950 border-t-[6px] border-yellow-300 shadow-[0_0_60px_rgba(251,191,36,0.6)] rounded-t-[1.5rem] z-0 overflow-hidden">
-                        <div className="absolute inset-0 bg-[url('/bg-clean.jpg')] opacity-30 mix-blend-overlay" />
-                        <span className="text-5xl md:text-6xl font-black text-amber-200/50 drop-shadow-lg">I</span>
+                      <div className="w-full h-[28vh] mt-[-20px] pt-6 relative flex items-center justify-center bg-gradient-to-b from-amber-500 to-amber-950 border-t-[6px] border-yellow-300 shadow-[0_0_60px_rgba(251,191,36,0.6)] rounded-t-[1.5rem] z-0 overflow-hidden">
+                        <span className="text-6xl md:text-7xl font-black text-amber-300/40 drop-shadow-lg">I</span>
                       </div>
                     </motion.div>
                   )}
@@ -314,9 +310,8 @@ export default function ResultsPage() {
                         medalIcon="🥉" 
                       />
                       
-                      <div className="w-full h-16 md:h-20 mt-[-15px] pt-2 relative flex items-center justify-center bg-gradient-to-b from-orange-900 to-stone-950 border-t-[4px] border-red-800 shadow-[0_0_40px_rgba(153,27,27,0.4)] rounded-t-[1.5rem] z-0 overflow-hidden">
-                        <div className="absolute inset-0 bg-[url('/bg-clean.jpg')] opacity-30 mix-blend-overlay" />
-                        <span className="text-3xl md:text-4xl font-black text-red-300/40 drop-shadow-md">III</span>
+                      <div className="w-full h-[12vh] mt-[-20px] pt-2 relative flex items-center justify-center bg-gradient-to-b from-orange-900 to-stone-950 border-t-[4px] border-red-800 shadow-[0_0_40px_rgba(153,27,27,0.4)] rounded-t-[1.5rem] z-0 overflow-hidden">
+                        <span className="text-3xl md:text-4xl font-black text-red-400/30 drop-shadow-md">III</span>
                       </div>
                     </motion.div>
                   )}
@@ -327,7 +322,6 @@ export default function ResultsPage() {
           </motion.div>
         )}
       </AnimatePresence>
-
 
       {/* ---------------- RESET MODAL ---------------- */}
       {showResetConfirm && (
