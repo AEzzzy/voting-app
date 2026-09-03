@@ -5,6 +5,43 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, AlertTriangle, Trophy, X, Activity } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const TypewriterText = ({ text, delay = 0, className, speed = 100 }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const startTimeout = setTimeout(() => {
+      if (isMounted) setStarted(true);
+    }, delay);
+    return () => {
+      isMounted = false;
+      clearTimeout(startTimeout);
+    };
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    let i = 0;
+    let isMounted = true;
+    const timer = setInterval(() => {
+      if (!isMounted) return;
+      if (i < text.length) {
+        setDisplayedText(text.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(timer);
+      }
+    }, speed);
+    return () => {
+      isMounted = false;
+      clearInterval(timer);
+    };
+  }, [text, started, speed]);
+
+  return <div className={className} dir="rtl" style={{ fontFamily: 'var(--font-kanzal)' }}>{displayedText}</div>;
+};
+
 export default function ResultsPage() {
   const [teams, setTeams] = useState([]);
   const [totalVotes, setTotalVotes] = useState(0);
@@ -238,6 +275,22 @@ export default function ResultsPage() {
                 </button>
               )}
             </div>
+
+            {/* Arabic Congratulations Typing Effect */}
+            {revealStep >= 3 && (
+              <div className="absolute top-[8%] md:top-[10%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 md:gap-4 z-50 w-full text-center pointer-events-none">
+                <TypewriterText 
+                  text="مبارك مهنى!" 
+                  delay={1200} 
+                  className="text-5xl md:text-7xl font-black text-amber-400 drop-shadow-[0_0_30px_rgba(251,191,36,0.8)]" 
+                />
+                <TypewriterText 
+                  text="اعز الله قدركم" 
+                  delay={2500} 
+                  className="text-3xl md:text-5xl font-bold text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]" 
+                />
+              </div>
+            )}
 
             {/* Podiums - Scaled using vh (viewport height) to guarantee they fit on any screen */}
             <div className="flex flex-row items-end justify-center w-full max-w-5xl px-4 gap-2 md:gap-4 relative z-10 h-full pb-0">
